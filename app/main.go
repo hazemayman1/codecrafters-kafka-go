@@ -32,15 +32,6 @@ func main() {
 	}
 
 	defer conn.Close()
-
-	response := "HTTP/1.1 200 OK\r\n" +
-		"message_size: 0\r\n" +
-		"correlation_id: 7\r\n"
-
-	_, err = conn.Write([]byte(response))
-	if err != nil {
-		fmt.Println("Error writing response:", err.Error())
-		return
-	}
+	conn.Write([]byte{0, 0, 0, 0, 0, 0, 0, 7})
 
 }
