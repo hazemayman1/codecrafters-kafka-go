@@ -25,13 +25,25 @@ func main() {
 
 	fmt.Println("server running on port 9092")
 
-	conn, err := l.Accept()
-	if err != nil {
-		fmt.Println("Error accepting connection: ", err.Error())
-		os.Exit(1)
+	for {
+		conn, err := l.Accept()
+		if err != nil {
+			fmt.Println("Error accepting connection: ", err.Error())
+			os.Exit(1)
+		}
+		go handleConnection(conn)
+
 	}
+}
 
+func handleConnection(conn net.Conn) {
 	defer conn.Close()
-	conn.Write([]byte{0, 0, 0, 0, 0, 0, 0, 7})
 
+	buff := make([]byte, 1024)
+	conn.Read(buff)
+
+	resp := make([]byte, 8)
+	copy(resp, []byte{0, 0, 0, 0})
+	copy(resp[4:], buff[8:12])
+	conn.Write(resp)
 }
