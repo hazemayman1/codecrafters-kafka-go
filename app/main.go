@@ -42,8 +42,11 @@ func handleConnection(conn net.Conn) {
 	buff := make([]byte, 1024)
 	conn.Read(buff)
 
+	// Preparing 8 bytes response
 	resp := make([]byte, 8)
-	copy(resp, []byte{0, 0, 0, 0})
-	copy(resp[4:], buff[8:12])
+	copy(resp, []byte{0, 0, 0, 0, buff[8], buff[9], buff[10], buff[11], 0, 35})
+	// Copying reference code to the reponse
+	copy(resp[4:8], buff[8:12])
+
 	conn.Write(resp)
 }
