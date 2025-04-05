@@ -44,9 +44,16 @@ func handleConnection(conn net.Conn) {
 
 	// Preparing 8 bytes response
 	resp := make([]byte, 8)
-	copy(resp, []byte{0, 0, 0, 0, buff[8], buff[9], buff[10], buff[11], 0, 35})
+	copy(resp, []byte{0, 0, 0, 0})
 	// Copying reference code to the reponse
 	copy(resp[4:8], buff[8:12])
 
+	var version int16
+	version = int16(buff[6])<<8 | int16(buff[7])
+	fmt.Println(version)
+
+	if version < 0 || version > 4 {
+		copy(resp[8:10], []byte{0, 35})
+	}
 	conn.Write(resp)
 }
