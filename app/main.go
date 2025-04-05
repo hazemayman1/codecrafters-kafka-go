@@ -43,7 +43,7 @@ func handleConnection(conn net.Conn) {
 	conn.Read(buff)
 
 	// Preparing 8 bytes response
-	resp := make([]byte, 8)
+	resp := make([]byte, 64)
 	copy(resp, []byte{0, 0, 0, 0})
 	// Copying reference code to the reponse
 	copy(resp[4:8], buff[8:12])
